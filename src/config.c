@@ -224,6 +224,8 @@ int config_parse_conf(struct config *cfg, const struct conf *conf)
 			   sizeof(cfg->sip.cert));
 	(void)conf_get_str(conf, "sip_cafile", cfg->sip.cafile,
 			   sizeof(cfg->sip.cafile));
+	(void)conf_get_str(conf, "sip_tlsmethod", cfg->sip.tlsmethod,
+			   sizeof(cfg->sip.tlsmethod));
 
 	/* Call */
 	(void)conf_get_u32(conf, "call_local_timeout",

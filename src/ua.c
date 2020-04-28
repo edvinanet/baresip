@@ -1287,13 +1287,25 @@ static int add_transp_af(const struct sa *laddr)
 		/* Build our SSL context*/
 		if (!uag.tls) {
 			const char *cert = NULL;
+			int tls_method = TLS_METHOD_SSLV23;	/* The old default */
 
 			if (str_isset(uag.cfg->cert)) {
 				cert = uag.cfg->cert;
 				info("SIP Certificate: %s\n", cert);
 			}
+			if (str_isset(uag.cfg->tlsmethod)) {
+				if (strncasecmp(uag.cfg->tlsmethod, "tls1.0", sizeof(uag.cfg->tlsmethod)) == 0) {
+					tls_method = TLS_METHOD_TLS10;
+				} else if (strncasecmp(uag.cfg->tlsmethod, "tls1.1", sizeof(uag.cfg->tlsmethod)) == 0) {
+					tls_method = TLS_METHOD_TLS11;
+				} else if (strncasecmp(uag.cfg->tlsmethod, "tls1.2", sizeof(uag.cfg->tlsmethod)) == 0) {
+					tls_method = TLS_METHOD_TLS12;
+				} else {
+					warning("ua: unknown TLS method %s\n", uag.cfg->tlsmethod);
+				}
+			}
 
-			err = tls_alloc(&uag.tls, TLS_METHOD_SSLV23,
+			err = tls_alloc(&uag.tls, tls_method,
 					cert, NULL);
 			if (err) {
 				warning("ua: tls_alloc() failed: %m\n", err);

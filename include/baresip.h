@@ -248,13 +248,21 @@ enum audio_mode {
 	AUDIO_MODE_THREAD,           /**< Use dedicated thread          */
 };
 
+/** TLS Min/Max versions */
+struct config_tlsversion {
+	int min_version;
+        int max_version;
+};
 
 /** SIP User-Agent */
 struct config_sip {
 	char uuid[64];          /**< Universally Unique Identifier  */
 	char local[64];         /**< Local SIP Address              */
-	char cert[256];         /**< SIP Certificate                */
+	char cert[256];         /**< SIP client Certificate         */
+	char tlsmethod[32];     /**< SIP client TLS method          */
+	char key[256];          /**< SIP client private Key         */
 	char cafile[256];       /**< SIP CA-file                    */
+	struct config_tlsversion client; /**< SIP TLS versions */
 };
 
 /** Call config */
